@@ -64,7 +64,7 @@ const cars = [
         fuel: "Petrol",
         transmission: "Automatic",
         seats: 5,
-        image: "HONDA.AVIF",
+        image: "HONDA.avif",
         prices: { "24hrs": 2300, "4 days": 9200, "10 days": 23000 },
         tag: "Comfort",
         badgeClass: "badge-popular"
@@ -76,7 +76,7 @@ const cars = [
         fuel: "Diesel",
         transmission: "Manual",
         seats: 7,
-        image: "MG1.WEBP",
+        image: "MG1.webp",
         prices: { "24hrs": 3200, "4 days": 12800, "10 days": 32000 },
         tag: "Tech",
         badgeClass: "badge-trending"

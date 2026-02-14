@@ -1,0 +1,600 @@
+/* ===========================
+   GLOBAL THEME VARIABLES
+   =========================== */
+:root {
+    --bg-main: #020617;
+    --bg-card: rgba(15, 23, 42, 0.9);
+    --accent-pink: #ec4899;
+    --accent-purple: #7c3aed;
+    --accent-blue: #22d3ee;
+    --accent-cyan: #06b6d4;
+    --accent-warm: #f97316;
+    --text-light: #f9fafb;
+    --text-muted: #9ca3af;
+    --radius-lg: 18px;
+    --shadow-soft: 0 22px 50px rgba(15, 23, 42, 0.9);
+}
+
+body.theme-light {
+    --bg-main: #e5e7eb;
+    --bg-card: #ffffff;
+    --text-light: #020617;
+    --text-muted: #4b5563;
+}
+/* ===========================
+   ALL 10 PREMIUM THEMES
+=========================== */
+
+/* 0 — DEFAULT THEME (Already exists) */
+
+/* 1 — ROYAL GOLD */
+body.theme-royal {
+    --bg-main: #0a0a0a;
+    --bg-card: #111;
+    --text-light: #f5f5f5;
+    --accent-pink: #d4af37;
+    --accent-blue: #d4af37;
+}
+
+/* 2 — CYBER NEON */
+body.theme-neon {
+    --bg-main: #03011a;
+    --bg-card: #0b012b;
+    --text-light: #d3faff;
+    --accent-pink: #bc13fe;
+    --accent-blue: #00eaff;
+}
+
+/* 3 — RED SPORT */
+body.theme-sport {
+    --bg-main: #0d0d0d;
+    --bg-card: #1a1a1a;
+    --accent-pink: #ff0033;
+    --accent-blue: #ff0033;
+    --text-light: #ffffff;
+}
+
+/* 4 — EMERALD GREEN */
+body.theme-emerald {
+    --bg-main: #081b14;
+    --bg-card: #0d2d22;
+    --accent-pink: #00c27a;
+    --accent-blue: #00c27a;
+    --text-light: #e2fff4;
+}
+
+/* 5 — ORANGE BURNOUT */
+body.theme-orange {
+    --bg-main: #1c0f00;
+    --bg-card: #2d1600;
+    --accent-pink: #ff8c00;
+    --accent-blue: #ff8c00;
+    --text-light: #fff4e0;
+}
+
+/* 6 — SILVER METAL */
+body.theme-metal {
+    --bg-main: #101010;
+    --bg-card: #1a1a1a;
+    --accent-blue: #c0c0c0;
+    --accent-pink: #b0b0b0;
+    --text-light: #f0f0f0;
+}
+
+/* 7 — ICE BLUE */
+body.theme-iceblue {
+    --bg-main: #0b1a2a;
+    --bg-card: #10283f;
+    --accent-blue: #80dfff;
+    --accent-pink: #66b3ff;
+    --text-light: #e3f8ff;
+}
+
+/* 8 — SUNSET GRADIENT */
+body.theme-sunset {
+    --bg-main: #1a0220;
+    --bg-card: #290333;
+    --accent-blue: #ff8c00;
+    --accent-pink: #ff008c;
+    --text-light: #ffe3f7;
+}
+
+/* 9 — MINIMAL WHITE */
+body.theme-minimal {
+    --bg-main: #fafafa;
+    --bg-card: #ffffff;
+    --text-light: #111;
+    --text-muted: #555;
+    --accent-blue: #333;
+    --accent-pink: #222;
+}
+
+/* 10 — STEALTH BLACK */
+body.theme-stealth {
+    --bg-main: #000;
+    --bg-card: #0d0d0d;
+    --accent-blue: #444;
+    --accent-pink: #333;
+    --text-light: #e5e5e5;
+}
+
+
+/* ===========================
+   BASE
+   =========================== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text-light);
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(59,130,246,0.4) 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(236,72,153,0.35) 0, transparent 55%),
+        radial-gradient(circle at 20% 85%, rgba(16,185,129,0.35) 0, transparent 55%),
+        radial-gradient(circle at 90% 85%, rgba(14,165,233,0.3) 0, transparent 55%),
+        var(--bg-main);
+    background-attachment: fixed;
+    overflow-x: hidden;
+    transition: background 0.4s ease, color 0.3s ease;
+}
+
+/* ===========================
+   NAVBAR SHARED
+   =========================== */
+.navbar-blur {
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.8));
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.5);
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.95);
+}
+
+body.theme-light .navbar-blur {
+    background: rgba(249, 250, 251, 0.95);
+    border-bottom-color: rgba(148, 163, 184, 0.6);
+    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.18);
+}
+
+.navbar-brand span:last-child {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.nav-link {
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.nav-link.active {
+    color: #f9fafb !important;
+    position: relative;
+}
+
+.nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 2px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue));
+}
+
+/* theme button */
+.theme-toggle {
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.9);
+    background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(15,23,42,0.9));
+    color: #fde68a;
+    font-size: 0.82rem;
+    padding-inline: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 8px 20px rgba(15,23,42,0.8);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.theme-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(15,23,42,0.9);
+}
+body.theme-light .theme-toggle {
+    background: radial-gradient(circle at top, #fefce8, #fef3c7);
+    color: #7c2d12;
+}
+
+/* small pill */
+.brand-pill {
+    border-radius: 999px;
+    padding: 4px 12px;
+    border: 1px solid rgba(148, 163, 184, 0.85);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-muted);
+}
+
+/* ===========================
+   SECTION TITLES
+   =========================== */
+.section-title {
+    text-align: center;
+    font-size: 2.1rem;
+    font-weight: 900;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #e5e7eb;
+    position: relative;
+}
+body.theme-light .section-title {
+    color: #020617;
+}
+.section-title::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        var(--accent-purple),
+        var(--accent-pink),
+        var(--accent-blue),
+        var(--accent-cyan)
+    );
+    box-shadow:
+        0 0 18px rgba(244, 244, 245, 0.9),
+        0 0 40px rgba(56, 189, 248, 0.7);
+}
+.section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1.6rem;
+}
+
+/* ===========================
+   HERO (HOME PAGE)
+   =========================== */
+.hero {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+.hero-card {
+    background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+    border-radius: 24px;
+    border: 1px solid rgba(148,163,184,0.6);
+    box-shadow: 0 24px 60px rgba(15,23,42,0.95);
+    padding: 1.5rem;
+}
+body.theme-light .hero-card {
+    background: #f9fafb;
+    box-shadow: 0 16px 35px rgba(15,23,42,0.2);
+}
+.hero-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+}
+.hero-gradient {
+    background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue));
+    -webkit-background-clip: text;
+    color: transparent;
+}
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    background: rgba(15,23,42,0.9);
+    border: 1px solid rgba(148,163,184,0.7);
+}
+body.theme-light .hero-badge {
+    background: #f3f4f6;
+}
+
+/* ===========================
+   CONTROL BAR (FLEET PAGE)
+   =========================== */
+.control-bar {
+    background: radial-gradient(circle at top left, rgba(15,23,42,0.92), rgba(15,23,42,0.86));
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    backdrop-filter: blur(22px);
+    padding: 8px 16px;
+    box-shadow: 0 18px 40px rgba(15,23,42,0.95);
+}
+body.theme-light .control-bar {
+    background: rgba(248,250,252,0.96);
+}
+
+.control-input,
+.control-select {
+    background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(15,23,42,0.9));
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.85);
+    color: var(--text-light);
+    font-size: 0.85rem;
+    padding-left: 2.4rem;
+}
+body.theme-light .control-input,
+body.theme-light .control-select {
+    background: #ffffff;
+    color: #020617;
+}
+.control-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.fav-toggle-btn {
+    border-radius: 999px;
+    border: 1px solid rgba(248, 250, 252, 0.75);
+    background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.95));
+    color: var(--text-light);
+    font-size: 0.82rem;
+    padding-inline: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    box-shadow: 0 8px 20px rgba(15,23,42,0.8);
+}
+.fav-toggle-btn.active {
+    background: radial-gradient(circle at top, #ef4444, #b91c1c);
+    border-color: rgba(254, 226, 226, 0.95);
+}
+
+/* ===========================
+   CAR CARD – SHARED
+   =========================== */
+.car-card {
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+
+    background:
+        linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.9)) padding-box,
+        linear-gradient(135deg,
+            rgba(236,72,153,0.4),
+            rgba(59,130,246,0.5),
+            rgba(56,189,248,0.5)
+        ) border-box;
+    border: 1px solid transparent;
+
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(24px);
+
+    /* इथे movement नाही – stable */
+    opacity: 1;
+    transform: none;
+    animation: none;
+
+    transition:
+        box-shadow 0.25s ease,
+        background 0.4s ease;
+}
+body.theme-light .car-card {
+    background:
+        linear-gradient(145deg, #ffffff, #f9fafb) padding-box,
+        linear-gradient(135deg,
+            rgba(59,130,246,0.3),
+            rgba(236,72,153,0.35),
+            rgba(56,189,248,0.35)
+        ) border-box;
+    box-shadow: 0 18px 36px rgba(15,23,42,0.18);
+}
+
+.car-card:hover {
+    box-shadow:
+        0 26px 60px rgba(15,23,42,0.9),
+        0 0 26px rgba(56,189,248,0.7);
+    background:
+        linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,0.9)) padding-box,
+        linear-gradient(135deg,
+            rgba(236,72,153,0.9),
+            rgba(59,130,246,0.9),
+            rgba(45,212,191,0.9)
+        ) border-box;
+}
+.car-badge {
+    position: absolute;
+    top: 13px;
+    right: -34px;
+    transform: rotate(45deg);
+    padding: 3px 40px;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #f9fafb;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.9);
+}
+.badge-popular { background: linear-gradient(90deg, #f97316, #ea580c); }
+.badge-best    { background: linear-gradient(90deg, #22c55e, #16a34a); }
+.badge-premium { background: linear-gradient(90deg, #0ea5e9, #2563eb); }
+.badge-new     { background: linear-gradient(90deg, #ec4899, #a855f7); }
+
+.fav-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.9);
+    background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(15,23,42,0.9));
+    color: #fecaca;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.fav-btn.active {
+    background: radial-gradient(circle at top, #ef4444, #b91c1c);
+    border-color: #fecaca;
+    color: #fee2e2;
+}
+
+.card-header-strip {
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+    color: #f9fafb;
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.car-image-wrap {
+    background: radial-gradient(circle at top, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+    padding: 12px;
+}
+.car-image-wrap img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 12px;
+    transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.car-info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    font-size: 0.72rem;
+    border-top: 1px solid rgba(148,163,184,0.35);
+    border-bottom: 1px solid rgba(148,163,184,0.35);
+    background: linear-gradient(
+        90deg,
+        rgba(15,23,42,0.96),
+        rgba(15,23,42,0.9)
+    );
+    color: #e5e7eb;
+}
+.car-title {
+    font-size: 1rem;
+    font-weight: 900;
+    padding: 10px 12px 0 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.price-block {
+    padding: 6px 12px 10px;
+    font-size: 0.82rem;
+}
+.price-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+/* ===========================
+   BOOKING FORM
+   =========================== */
+.booking-card {
+    background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+    border-radius: 20px;
+    border: 1px solid rgba(148,163,184,0.7);
+    box-shadow: 0 24px 55px rgba(15,23,42,0.95);
+    padding: 1.5rem;
+}
+body.theme-light .booking-card {
+    background: #f9fafb;
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
+footer {
+    border-top: 1px solid rgba(148,163,184,0.5);
+    padding: 0.8rem 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: radial-gradient(circle at top, rgba(15,23,42,0.95), rgba(15,23,42,1));
+}
+body.theme-light footer {
+    background: #e5e7eb;
+}
+
+/* ===========================
+   RESPONSIVE SMALL
+   =========================== */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    .control-bar {
+        border-radius: 18px;
+    }
+}
+
+
+/* hover zoom for images */
+.car-card:hover .car-image-wrap img {
+    transform: scale(1.05);
+    filter: brightness(1.08);
+}
+/* ===== Fix: Sort dropdown not visible in dark theme ===== */
+
+.theme-dark .form-select,
+.theme-dark select {
+    background-color: #0f172a !important;   /* dark background */
+    color: #f8fafc !important;              /* light text */
+    border-color: #475569 !important;
+}
+
+.theme-dark .form-select option,
+.theme-dark select option {
+    background-color: #0f172a !important;   /* option background */
+    color: #f8fafc !important;              /* option text */
+}
+/* ===== Fix: navbar links invisible in light theme ===== */
+
+.theme-light .navbar.navbar-blur {
+    background-color: rgba(248, 250, 252, 0.92); /* हलकासा blur background */
+}
+
+/* Light theme मध्ये nav links आणि brand काळसर दिसण्यासाठी */
+.theme-light .navbar.navbar-dark .navbar-brand,
+.theme-light .navbar.navbar-dark .nav-link {
+    color: #0f172a !important;     /* गडद निळा/काळसर */
+}
+
+/* active / hover state थोडं highlight */
+.theme-light .navbar.navbar-dark .nav-link.active,
+.theme-light .navbar.navbar-dark .nav-link:hover {
+    color: #2563eb !important;     /* निळा highlight */
+}
+/* ===================================== */
+/* ============  OTP BOX  ============== */
+/* ===================================== */
+.otp-box {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid rgb(148 163 184 / 40%);
+    background: rgba(30, 41, 59, 0.5);
+    color: white;
+}
+
+
+

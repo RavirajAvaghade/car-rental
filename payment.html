@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Rental Lab – Payment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-dark">
+<nav class="navbar navbar-blur navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+            <span class="fs-4">🚗</span>
+            <span>Car Rental Lab</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto me-3">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="fleet.html">Fleet</a></li>
+                <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            </ul>
+            <button id="themeToggle" class="theme-toggle" type="button">
+                <span class="icon">🌙</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <header class="mb-3">
+        <h1 class="section-title">Order & Payment</h1>
+        <p class="section-subtitle">
+            Order summary • Total bill • QR scan • Confirmation message.
+        </p>
+    </header>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="booking-card">
+                <h5 class="mb-2">Order summary</h5>
+                <h6 id="paymentCarName" class="mb-2">Loading...</h6>
+                <div id="paymentSummary" class="small mb-3"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-semibold">Total bill:</span>
+                    <span class="fs-5 fw-bold" id="paymentAmount">₹ 0</span>
+                </div>
+
+                <!-- ===== Coupon UI (added) ===== -->
+                <div class="mb-3">
+                    <label class="form-label small">Have a promo code?</label>
+                    <div class="d-flex gap-2">
+                        <input id="couponCode" class="form-control form-control-sm" placeholder="Enter coupon code (e.g. FIRST50)">
+                        <button id="applyCouponBtn" class="btn btn-sm btn-outline-primary">Apply</button>
+                    </div>
+                    <div id="couponMessage" class="small text-muted mt-2"></div>
+                </div>
+
+                <div class="mb-2 small">
+                    <div>Discount: <strong id="paymentDiscount">₹ 0</strong></div>
+                    <div>Final total: <strong id="paymentFinalAmount">₹ 0</strong></div>
+                </div>
+                <!-- ===== end coupon UI ===== -->
+
+                <p class="small text-muted mb-1">
+                    Note: This is a demo front-end – no real payment is processed. Explain this in viva/portfolio.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="booking-card text-center">
+                <h6 class="mb-2">Scan & Pay (Demo)</h6>
+                <img
+                    src="images/phonepe-qr.png"
+                    alt="Scan to pay"
+                    class="img-fluid rounded-3 mb-3"
+                    style="max-width:260px;border:1px solid rgba(148,163,184,0.7);padding:6px;background:#020617;"
+                >
+
+                <p class="small text-muted mb-3">
+                    This is only UI. In a real project we would integrate a payment gateway / UPI deeplink.
+                </p>
+
+                <button id="payButton" class="btn btn-sm btn-primary w-100 mb-2">
+                    Pay total bill (Demo)
+                </button>
+
+                <div
+                    id="paymentConfirmation"
+                    class="alert alert-success py-2 px-3 small d-none mt-2"
+                    role="alert"
+                >
+                    ✅ Your order is confirmed!
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container d-flex justify-content-between small flex-column flex-md-row gap-2">
+        <span>Payment flow demo (front-end only).</span>
+        <span>Use this to explain multi-step booking + payment UI.</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

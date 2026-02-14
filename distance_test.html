@@ -1,0 +1,588 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Distance Test - Maharashtra</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 18px; }
+    label, select, button { display:block; margin:8px 0; }
+    .row { display:flex; gap:12px; align-items:center; }
+  </style>
+</head>
+<body>
+  <h2>Distance Calculator (Maharashtra) — Test</h2>
+
+  <div class="row">
+    <div>
+      <label for="fromSelect">From (district / taluka)</label>
+      <select id="fromSelect"></select>
+    </div>
+    <div>
+      <label for="toSelect">To (district / taluka)</label>
+      <select id="toSelect"></select>
+    </div>
+  </div>
+
+  <button id="calcBtn">Calculate Distance</button>
+
+  <p id="result"></p>
+
+<script>
+/* --- 1) MAHARASHTRA (district -> talukas) --- */
+
+/* --- 2) DISTRICT_COORDS (centroid coords for each district) ---
+   Use these to get lat/lng for district names. If taluka coords needed
+   more accuracy, add them similarly.
+*/
+/* ========================================
+   MAHARASHTRA : District → Talukas
+   (Single JS file ready)
+======================================== */
+const CITY_DB = [
+  // --- Ahmednagar ---
+  { name: "Ahmednagar", lat: 19.0948, lng: 74.7480 },
+  { name: "Ahmednagar (Taluka)", lat: 19.0948, lng: 74.7480 },
+  { name: "Sangamner", lat: 19.0948, lng: 74.7480 },
+  { name: "Rahuri", lat: 19.0948, lng: 74.7480 },
+  { name: "Shrirampur", lat: 19.0948, lng: 74.7480 },
+  { name: "Kopargaon", lat: 19.0948, lng: 74.7480 },
+  { name: "Nagar", lat: 19.0948, lng: 74.7480 },
+  { name: "Shevgaon", lat: 19.0948, lng: 74.7480 },
+  { name: "Pathardi", lat: 19.0948, lng: 74.7480 },
+  { name: "Nevasa", lat: 19.0948, lng: 74.7480 },
+  { name: "Parner", lat: 19.0948, lng: 74.7480 },
+  { name: "Akole", lat: 19.0948, lng: 74.7480 },
+  { name: "Rahata", lat: 19.0948, lng: 74.7480 },
+
+  // --- Akola ---
+  { name: "Akola", lat: 20.7096, lng: 76.9994 },
+  { name: "Balapur", lat: 20.7096, lng: 76.9994 },
+  { name: "Murtijapur", lat: 20.7096, lng: 76.9994 },
+  { name: "Akot", lat: 20.7096, lng: 76.9994 },
+  { name: "Telhara", lat: 20.7096, lng: 76.9994 },
+  { name: "Patur", lat: 20.7096, lng: 76.9994 },
+
+  // --- Amravati ---
+  { name: "Amravati", lat: 20.9374, lng: 77.7796 },
+  { name: "Achalpur", lat: 20.9374, lng: 77.7796 },
+  { name: "Chandur Bazar", lat: 20.9374, lng: 77.7796 },
+  { name: "Chandur Railway", lat: 20.9374, lng: 77.7796 },
+  { name: "Daryapur", lat: 20.9374, lng: 77.7796 },
+  { name: "Dhamangaon Railway", lat: 20.9374, lng: 77.7796 },
+  { name: "Morshi", lat: 20.9374, lng: 77.7796 },
+  { name: "Warud", lat: 20.9374, lng: 77.7796 },
+  { name: "Anjangaon Surji", lat: 20.9374, lng: 77.7796 },
+  { name: "Bhatkuli", lat: 20.9374, lng: 77.7796 },
+  { name: "Nandgaon Khandeshwar", lat: 20.9374, lng: 77.7796 },
+
+  // --- Aurangabad ---
+  { name: "Aurangabad", lat: 19.8762, lng: 75.3433 },
+  { name: "Gangapur", lat: 19.8762, lng: 75.3433 },
+  { name: "Kannad", lat: 19.8762, lng: 75.3433 },
+  { name: "Khuldabad", lat: 19.8762, lng: 75.3433 },
+  { name: "Paithan", lat: 19.8762, lng: 75.3433 },
+  { name: "Phulambri", lat: 19.8762, lng: 75.3433 },
+  { name: "Sillod", lat: 19.8762, lng: 75.3433 },
+  { name: "Vaijapur", lat: 19.8762, lng: 75.3433 },
+
+  // --- Beed ---
+  { name: "Beed", lat: 18.9891, lng: 75.7601 },
+  { name: "Ambejogai", lat: 18.9891, lng: 75.7601 },
+  { name: "Ashti", lat: 18.9891, lng: 75.7601 },
+  { name: "Dharur", lat: 18.9891, lng: 75.7601 },
+  { name: "Georai", lat: 18.9891, lng: 75.7601 },
+  { name: "Kaij", lat: 18.9891, lng: 75.7601 },
+  { name: "Majalgaon", lat: 18.9891, lng: 75.7601 },
+  { name: "Parli", lat: 18.9891, lng: 75.7601 },
+  { name: "Patoda", lat: 18.9891, lng: 75.7601 },
+  { name: "Shirur Kasar", lat: 18.9891, lng: 75.7601 },
+  { name: "Wadwani", lat: 18.9891, lng: 75.7601 },
+
+  // --- Bhandara ---
+  { name: "Bhandara", lat: 21.1682, lng: 79.6480 },
+  { name: "Tumsar", lat: 21.1682, lng: 79.6480 },
+  { name: "Pauni", lat: 21.1682, lng: 79.6480 },
+  { name: "Mohadi", lat: 21.1682, lng: 79.6480 },
+  { name: "Sakoli", lat: 21.1682, lng: 79.6480 },
+  { name: "Lakhani", lat: 21.1682, lng: 79.6480 },
+  { name: "Lakhandur", lat: 21.1682, lng: 79.6480 },
+
+  // --- Buldhana ---
+  { name: "Buldhana", lat: 20.5296, lng: 76.1842 },
+  { name: "Chikhli", lat: 20.5296, lng: 76.1842 },
+  { name: "Deulgaon Raja", lat: 20.5296, lng: 76.1842 },
+  { name: "Jalgaon Jamod", lat: 20.5296, lng: 76.1842 },
+  { name: "Khamgaon", lat: 20.5296, lng: 76.1842 },
+  { name: "Lonar", lat: 20.5296, lng: 76.1842 },
+  { name: "Mehkar", lat: 20.5296, lng: 76.1842 },
+  { name: "Malkapur", lat: 20.5296, lng: 76.1842 },
+  { name: "Shegaon", lat: 20.5296, lng: 76.1842 },
+  { name: "Sindkhed Raja", lat: 20.5296, lng: 76.1842 },
+
+  // --- Chandrapur ---
+  { name: "Chandrapur", lat: 19.9615, lng: 79.2961 },
+  { name: "Ballarpur", lat: 19.9615, lng: 79.2961 },
+  { name: "Bhadravati", lat: 19.9615, lng: 79.2961 },
+  { name: "Brahmapuri", lat: 19.9615, lng: 79.2961 },
+  { name: "Nagbhid", lat: 19.9615, lng: 79.2961 },
+  { name: "Sindewahi", lat: 19.9615, lng: 79.2961 },
+  { name: "Saoli", lat: 19.9615, lng: 79.2961 },
+  { name: "Mul", lat: 19.9615, lng: 79.2961 },
+  { name: "Pombhurna", lat: 19.9615, lng: 79.2961 },
+  { name: "Korpana", lat: 19.9615, lng: 79.2961 },
+  { name: "Jiwati", lat: 19.9615, lng: 79.2961 },
+
+  // --- Dhule ---
+  { name: "Dhule", lat: 20.9042, lng: 74.7749 },
+  { name: "Sakri", lat: 20.9042, lng: 74.7749 },
+  { name: "Shirpur", lat: 20.9042, lng: 74.7749 },
+  { name: "Shindkheda", lat: 20.9042, lng: 74.7749 },
+
+  // --- Gadchiroli ---
+  { name: "Gadchiroli", lat: 19.9641, lng: 80.1983 },
+  { name: "Aheri", lat: 19.9641, lng: 80.1983 },
+  { name: "Armori", lat: 19.9641, lng: 80.1983 },
+  { name: "Chamorshi", lat: 19.9641, lng: 80.1983 },
+  { name: "Desaiganj (Wadsa)", lat: 19.9641, lng: 80.1983 },
+  { name: "Dhanora", lat: 19.9641, lng: 80.1983 },
+  { name: "Etapalli", lat: 19.9641, lng: 80.1983 },
+  { name: "Kurkheda", lat: 19.9641, lng: 80.1983 },
+  { name: "Korchi", lat: 19.9641, lng: 80.1983 },
+  { name: "Sironcha", lat: 19.9641, lng: 80.1983 },
+
+  // --- Gondia ---
+  { name: "Gondia", lat: 21.4624, lng: 80.2209 },
+  { name: "Tirora", lat: 21.4624, lng: 80.2209 },
+  { name: "Goregaon", lat: 21.4624, lng: 80.2209 },
+  { name: "Amgaon", lat: 21.4624, lng: 80.2209 },
+  { name: "Salekasa", lat: 21.4624, lng: 80.2209 },
+  { name: "Arjuni Morgaon", lat: 21.4624, lng: 80.2209 },
+  { name: "Deori", lat: 21.4624, lng: 80.2209 },
+
+  // --- Hingoli ---
+  { name: "Hingoli", lat: 19.7190, lng: 77.1424 },
+  { name: "Sengaon", lat: 19.7190, lng: 77.1424 },
+  { name: "Kalamnuri", lat: 19.7190, lng: 77.1424 },
+  { name: "Aundha Nagnath", lat: 19.7190, lng: 77.1424 },
+  { name: "Basmath", lat: 19.7190, lng: 77.1424 },
+
+  // --- Jalgaon ---
+  { name: "Jalgaon", lat: 21.0077, lng: 75.5626 },
+  { name: "Bhusawal", lat: 21.0077, lng: 75.5626 },
+  { name: "Pachora", lat: 21.0077, lng: 75.5626 },
+  { name: "Dharangaon", lat: 21.0077, lng: 75.5626 },
+  { name: "Chalisgaon", lat: 21.0077, lng: 75.5626 },
+  { name: "Amalner", lat: 21.0077, lng: 75.5626 },
+  { name: "Bodwad", lat: 21.0077, lng: 75.5626 },
+  { name: "Yawal", lat: 21.0077, lng: 75.5626 },
+  { name: "Erandol", lat: 21.0077, lng: 75.5626 },
+  { name: "Jamalpur", lat: 21.0077, lng: 75.5626 },
+  { name: "Raver", lat: 21.0077, lng: 75.5626 },
+  { name: "Chopda", lat: 21.0077, lng: 75.5626 },
+  { name: "Shirpur (Jalgaon)", lat: 21.0077, lng: 75.5626 },
+
+  // --- Jalna ---
+  { name: "Jalna", lat: 19.8297, lng: 75.8800 },
+  { name: "Ambad", lat: 19.8297, lng: 75.8800 },
+  { name: "Bhokardan", lat: 19.8297, lng: 75.8800 },
+  { name: "Badnapur", lat: 19.8297, lng: 75.8800 },
+  { name: "Partur", lat: 19.8297, lng: 75.8800 },
+  { name: "Ghansawangi", lat: 19.8297, lng: 75.8800 },
+  { name: "Mantha", lat: 19.8297, lng: 75.8800 },
+
+  // --- Kolhapur ---
+  { name: "Kolhapur", lat: 16.7050, lng: 74.2433 },
+  { name: "Karveer", lat: 16.7050, lng: 74.2433 },
+  { name: "Shirol", lat: 16.7050, lng: 74.2433 },
+  { name: "Hatkanangale", lat: 16.7050, lng: 74.2433 },
+  { name: "Panhala", lat: 16.7050, lng: 74.2433 },
+  { name: "Shahuwadi", lat: 16.7050, lng: 74.2433 },
+  { name: "Gaganbavda", lat: 16.7050, lng: 74.2433 },
+  { name: "Radhanagari", lat: 16.7050, lng: 74.2433 },
+  { name: "Kagal", lat: 16.7050, lng: 74.2433 },
+  { name: "Bhudargad", lat: 16.7050, lng: 74.2433 },
+  { name: "Ajra", lat: 16.7050, lng: 74.2433 },
+  { name: "Chandgad", lat: 16.7050, lng: 74.2433 },
+
+  // --- Latur ---
+  { name: "Latur", lat: 18.4088, lng: 76.5604 },
+  { name: "Ausa", lat: 18.4088, lng: 76.5604 },
+  { name: "Nilanga", lat: 18.4088, lng: 76.5604 },
+  { name: "Udgir", lat: 18.4088, lng: 76.5604 },
+  { name: "Chakur", lat: 18.4088, lng: 76.5604 },
+  { name: "Deoni", lat: 18.4088, lng: 76.5604 },
+  { name: "Renapur", lat: 18.4088, lng: 76.5604 },
+  { name: "Shirur Anantpal", lat: 18.4088, lng: 76.5604 },
+  { name: "Jalkot", lat: 18.4088, lng: 76.5604 },
+
+  // --- Mumbai City ---
+  { name: "Mumbai City", lat: 18.9388, lng: 72.8354 },
+
+  // --- Mumbai Suburban ---
+  { name: "Mumbai Suburban", lat: 19.1197, lng: 72.8468 },
+  { name: "Borivali", lat: 19.1197, lng: 72.8468 },
+  { name: "Andheri", lat: 19.1197, lng: 72.8468 },
+  { name: "Kurla", lat: 19.1197, lng: 72.8468 },
+
+  // --- Nagpur ---
+  { name: "Nagpur", lat: 21.1458, lng: 79.0882 },
+  { name: "Kamptee", lat: 21.1458, lng: 79.0882 },
+  { name: "Hingna", lat: 21.1458, lng: 79.0882 },
+  { name: "Umred", lat: 21.1458, lng: 79.0882 },
+  { name: "Kalmeshwar", lat: 21.1458, lng: 79.0882 },
+  { name: "Katol", lat: 21.1458, lng: 79.0882 },
+  { name: "Narkhed", lat: 21.1458, lng: 79.0882 },
+  { name: "Savner", lat: 21.1458, lng: 79.0882 },
+  { name: "Parseoni", lat: 21.1458, lng: 79.0882 },
+  { name: "Mauda", lat: 21.1458, lng: 79.0882 },
+  { name: "Ramtek", lat: 21.1458, lng: 79.0882 },
+  { name: "Bhiwapur", lat: 21.1458, lng: 79.0882 },
+
+  // --- Nanded ---
+  { name: "Nanded", lat: 19.1383, lng: 77.3210 },
+  { name: "Mukhed", lat: 19.1383, lng: 77.3210 },
+  { name: "Deglur", lat: 19.1383, lng: 77.3210 },
+  { name: "Kandhar", lat: 19.1383, lng: 77.3210 },
+  { name: "Naigaon", lat: 19.1383, lng: 77.3210 },
+  { name: "Umri", lat: 19.1383, lng: 77.3210 },
+  { name: "Hadgaon", lat: 19.1383, lng: 77.3210 },
+  { name: "Biloli", lat: 19.1383, lng: 77.3210 },
+  { name: "Kinwat", lat: 19.1383, lng: 77.3210 },
+  { name: "Ardhapur", lat: 19.1383, lng: 77.3210 },
+  { name: "Bhokar", lat: 19.1383, lng: 77.3210 },
+
+  // --- Nandurbar ---
+  { name: "Nandurbar", lat: 21.3662, lng: 74.2405 },
+  { name: "Shahada", lat: 21.3662, lng: 74.2405 },
+  { name: "Taloda", lat: 21.3662, lng: 74.2405 },
+  { name: "Akkalkuwa", lat: 21.3662, lng: 74.2405 },
+  { name: "Dhadgaon", lat: 21.3662, lng: 74.2405 },
+  { name: "Navapur", lat: 21.3662, lng: 74.2405 },
+
+  // --- Nashik ---
+  { name: "Nashik", lat: 19.9975, lng: 73.7898 },
+  { name: "Malegaon", lat: 19.9975, lng: 73.7898 },
+  { name: "Nandgaon", lat: 19.9975, lng: 73.7898 },
+  { name: "Sinnar", lat: 19.9975, lng: 73.7898 },
+  { name: "Chandvad", lat: 19.9975, lng: 73.7898 },
+  { name: "Igatpuri", lat: 19.9975, lng: 73.7898 },
+  { name: "Yeola", lat: 19.9975, lng: 73.7898 },
+  { name: "Dindori", lat: 19.9975, lng: 73.7898 },
+  { name: "Kalwan", lat: 19.9975, lng: 73.7898 },
+  { name: "Peth", lat: 19.9975, lng: 73.7898 },
+  { name: "Surgana", lat: 19.9975, lng: 73.7898 },
+  { name: "Baglan", lat: 19.9975, lng: 73.7898 },
+  { name: "Trimbak", lat: 19.9975, lng: 73.7898 },
+
+  // --- Osmanabad ---
+  { name: "Osmanabad", lat: 18.1863, lng: 76.0419 },
+  { name: "Tuljapur", lat: 18.1863, lng: 76.0419 },
+  { name: "Bhoom", lat: 18.1863, lng: 76.0419 },
+  { name: "Kalamb", lat: 18.1863, lng: 76.0419 },
+  { name: "Lohara", lat: 18.1863, lng: 76.0419 },
+  { name: "Paranda", lat: 18.1863, lng: 76.0419 },
+  { name: "Umarga", lat: 18.1863, lng: 76.0419 },
+  { name: "Washi", lat: 18.1863, lng: 76.0419 },
+
+  // --- Palghar ---
+  { name: "Palghar", lat: 19.6964, lng: 72.7690 },
+  { name: "Vasai", lat: 19.6964, lng: 72.7690 },
+  { name: "Dahanu", lat: 19.6964, lng: 72.7690 },
+  { name: "Talasari", lat: 19.6964, lng: 72.7690 },
+  { name: "Jawhar", lat: 19.6964, lng: 72.7690 },
+  { name: "Mokhada", lat: 19.6964, lng: 72.7690 },
+  { name: "Vada", lat: 19.6964, lng: 72.7690 },
+  { name: "Wada", lat: 19.6964, lng: 72.7690 },
+
+  // --- Parbhani ---
+  { name: "Parbhani", lat: 19.2700, lng: 76.7600 },
+  { name: "Gangakhed", lat: 19.2700, lng: 76.7600 },
+  { name: "Jintur", lat: 19.2700, lng: 76.7600 },
+  { name: "Selu", lat: 19.2700, lng: 76.7600 },
+  { name: "Manwat", lat: 19.2700, lng: 76.7600 },
+  { name: "Pathri", lat: 19.2700, lng: 76.7600 },
+  { name: "Sonpeth", lat: 19.2700, lng: 76.7600 },
+  { name: "Purna", lat: 19.2700, lng: 76.7600 },
+
+  // --- Pune ---
+  { name: "Pune", lat: 18.5204, lng: 73.8567 },
+  { name: "Pune City", lat: 18.5204, lng: 73.8567 },
+  { name: "Haveli", lat: 18.5204, lng: 73.8567 },
+  { name: "Bhor", lat: 18.5204, lng: 73.8567 },
+  { name: "Baramati", lat: 18.5204, lng: 73.8567 },
+  { name: "Indapur", lat: 18.5204, lng: 73.8567 },
+  { name: "Junnar", lat: 18.5204, lng: 73.8567 },
+  { name: "Shirur", lat: 18.5204, lng: 73.8567 },
+  { name: "Ambegaon", lat: 18.5204, lng: 73.8567 },
+  { name: "Khed", lat: 18.5204, lng: 73.8567 },
+  { name: "Mawal", lat: 18.5204, lng: 73.8567 },
+  { name: "Mulshi", lat: 18.5204, lng: 73.8567 },
+  { name: "Daund", lat: 18.5204, lng: 73.8567 },
+  { name: "Purandar", lat: 18.5204, lng: 73.8567 },
+  { name: "Velhe", lat: 18.5204, lng: 73.8567 },
+
+  // --- Raigad ---
+  { name: "Raigad", lat: 18.5200, lng: 73.1000 },
+  { name: "Alibag", lat: 18.5200, lng: 73.1000 },
+  { name: "Panvel", lat: 18.5200, lng: 73.1000 },
+  { name: "Pen", lat: 18.5200, lng: 73.1000 },
+  { name: "Uran", lat: 18.5200, lng: 73.1000 },
+  { name: "Karjat", lat: 18.5200, lng: 73.1000 },
+  { name: "Khalapur", lat: 18.5200, lng: 73.1000 },
+  { name: "Mangaon", lat: 18.5200, lng: 73.1000 },
+  { name: "Mahad", lat: 18.5200, lng: 73.1000 },
+  { name: "Poladpur", lat: 18.5200, lng: 73.1000 },
+  { name: "Shrivardhan", lat: 18.5200, lng: 73.1000 },
+  { name: "Mhasla", lat: 18.5200, lng: 73.1000 },
+  { name: "Sudhagad Pali", lat: 18.5200, lng: 73.1000 },
+  { name: "Roha", lat: 18.5200, lng: 73.1000 },
+  { name: "Tala", lat: 18.5200, lng: 73.1000 },
+
+  // --- Ratnagiri ---
+  { name: "Ratnagiri", lat: 16.9902, lng: 73.3120 },
+  { name: "Chiplun", lat: 16.9902, lng: 73.3120 },
+  { name: "Guhagar", lat: 16.9902, lng: 73.3120 },
+  { name: "Rajapur", lat: 16.9902, lng: 73.3120 },
+  { name: "Sangameshwar", lat: 16.9902, lng: 73.3120 },
+  { name: "Dapoli", lat: 16.9902, lng: 73.3120 },
+  { name: "Lanja", lat: 16.9902, lng: 73.3120 },
+  { name: "Mandangad", lat: 16.9902, lng: 73.3120 },
+  { name: "Khed (Ratnagiri)", lat: 16.9902, lng: 73.3120 },
+
+  // --- Sangli ---
+  { name: "Sangli", lat: 16.8544, lng: 74.5642 },
+  { name: "Miraj", lat: 16.8544, lng: 74.5642 },
+  { name: "Tasgaon", lat: 16.8544, lng: 74.5642 },
+  { name: "Kavathe Mahankal", lat: 16.8544, lng: 74.5642 },
+  { name: "Jat", lat: 16.8544, lng: 74.5642 },
+  { name: "Palus", lat: 16.8544, lng: 74.5642 },
+  { name: "Khanapur (Vita)", lat: 16.8544, lng: 74.5642 },
+  { name: "Walwa", lat: 16.8544, lng: 74.5642 },
+  { name: "Shirala", lat: 16.8544, lng: 74.5642 },
+
+  // --- Satara ---
+  { name: "Satara", lat: 17.6887, lng: 73.9939 },
+  { name: "Karad", lat: 17.6887, lng: 73.9939 },
+  { name: "Phaltan", lat: 17.6887, lng: 73.9939 },
+  { name: "Khatav", lat: 17.6887, lng: 73.9939 },
+  { name: "Koregaon", lat: 17.6887, lng: 73.9939 },
+  { name: "Patan", lat: 17.6887, lng: 73.9939 },
+  { name: "Man", lat: 17.6887, lng: 73.9939 },
+  { name: "Mahabaleshwar", lat: 17.6887, lng: 73.9939 },
+  { name: "Wai", lat: 17.6887, lng: 73.9939 },
+
+  // --- Sindhudurg ---
+  { name: "Sindhudurg", lat: 16.3492, lng: 73.5594 },
+  { name: "Kudal", lat: 16.3492, lng: 73.5594 },
+  { name: "Sawantwadi", lat: 16.3492, lng: 73.5594 },
+  { name: "Vengurla", lat: 16.3492, lng: 73.5594 },
+  { name: "Malvan", lat: 16.3492, lng: 73.5594 },
+  { name: "Devgad", lat: 16.3492, lng: 73.5594 },
+  { name: "Kankavli", lat: 16.3492, lng: 73.5594 },
+  { name: "Dodamarg", lat: 16.3492, lng: 73.5594 },
+
+  // --- Solapur ---
+  { name: "Solapur", lat: 17.6599, lng: 75.9064 },
+  { name: "Solapur North", lat: 17.6599, lng: 75.9064 },
+  { name: "Solapur South", lat: 17.6599, lng: 75.9064 },
+  { name: "Pandharpur", lat: 17.6599, lng: 75.9064 },
+  { name: "Barshi", lat: 17.6599, lng: 75.9064 },
+  { name: "Akkalkot", lat: 17.6599, lng: 75.9064 },
+  { name: "Karmala", lat: 17.6599, lng: 75.9064 },
+  { name: "Sangola", lat: 17.6599, lng: 75.9064 },
+  { name: "Mohol", lat: 17.6599, lng: 75.9064 },
+  { name: "Malshiras", lat: 17.6599, lng: 75.9064 },
+  { name: "Mangalwedha", lat: 17.6599, lng: 75.9064 },
+  { name: "Madha", lat: 17.6599, lng: 75.9064 },
+
+  // --- Thane ---
+  { name: "Thane", lat: 19.2183, lng: 72.9781 },
+  { name: "Kalyan", lat: 19.2183, lng: 72.9781 },
+  { name: "Ulhasnagar", lat: 19.2183, lng: 72.9781 },
+  { name: "Ambarnath", lat: 19.2183, lng: 72.9781 },
+  { name: "Bhiwandi", lat: 19.2183, lng: 72.9781 },
+  { name: "Shahapur", lat: 19.2183, lng: 72.9781 },
+  { name: "Murbad", lat: 19.2183, lng: 72.9781 },
+
+  // --- Wardha ---
+  { name: "Wardha", lat: 20.7453, lng: 78.6022 },
+  { name: "Hinganghat", lat: 20.7453, lng: 78.6022 },
+  { name: "Samudrapur", lat: 20.7453, lng: 78.6022 },
+  { name: "Arvi", lat: 20.7453, lng: 78.6022 },
+  { name: "Deoli", lat: 20.7453, lng: 78.6022 },
+  { name: "Karanja", lat: 20.7453, lng: 78.6022 },
+
+  // --- Washim ---
+  { name: "Washim", lat: 20.1110, lng: 77.1330 },
+  { name: "Karanja (Washim)", lat: 20.1110, lng: 77.1330 },
+  { name: "Risod", lat: 20.1110, lng: 77.1330 },
+  { name: "Malegaon (Washim)", lat: 20.1110, lng: 77.1330 },
+  { name: "Mangrulpir", lat: 20.1110, lng: 77.1330 },
+
+  // --- Yavatmal ---
+  { name: "Yavatmal", lat: 20.3899, lng: 78.1307 },
+  { name: "Umarkhed", lat: 20.3899, lng: 78.1307 },
+  { name: "Pusad", lat: 20.3899, lng: 78.1307 },
+  { name: "Ghatanji", lat: 20.3899, lng: 78.1307 },
+  { name: "Wani", lat: 20.3899, lng: 78.1307 },
+  { name: "Arni", lat: 20.3899, lng: 78.1307 },
+  { name: "Ralegaon", lat: 20.3899, lng: 78.1307 },
+  { name: "Darwha", lat: 20.3899, lng: 78.1307 },
+  { name: "Kalamb", lat: 20.3899, lng: 78.1307 },
+  { name: "Mahagaon", lat: 20.3899, lng: 78.1307 },
+  { name: "Ner", lat: 20.3899, lng: 78.1307 }
+];
+
+
+const MAHARASHTRA = {
+    "Ahmednagar": ["Ahmednagar","Sangamner","Rahuri","Shrirampur","Kopargaon","Nagar","Shevgaon","Pathardi","Nevasa","Parner","Akole","Rahata"],
+    "Akola": ["Akola","Balapur","Murtijapur","Akot","Telhara","Patur"],
+    "Amravati": ["Amravati","Achalpur","Chandur Bazar","Chandur Railway","Daryapur","Dhamangaon Railway","Morshi","Warud","Anjangaon Surji","Bhatkuli","Nandgaon Khandeshwar"],
+    "Aurangabad": ["Aurangabad","Gangapur","Kannad","Khuldabad","Paithan","Phulambri","Sillod","Vaijapur"],
+    "Beed": ["Beed","Ambejogai","Ashti","Dharur","Georai","Kaij","Majalgaon","Parli","Patoda","Shirur Kasar","Wadwani"],
+    "Bhandara": ["Bhandara","Tumsar","Pauni","Mohadi","Sakoli","Lakhani","Lakhandur"],
+    "Buldhana": ["Buldhana","Chikhli","Deulgaon Raja","Jalgaon Jamod","Khamgaon","Lonar","Mehkar","Malkapur","Shegaon","Sindkhed Raja"],
+    "Chandrapur": ["Chandrapur","Ballarpur","Bhadravati","Brahmapuri","Nagbhid","Sindewahi","Saoli","Mul","Pombhurna","Korpana","Jiwati"],
+    "Dhule": ["Dhule","Sakri","Shirpur","Shindkheda"],
+    "Gadchiroli": ["Gadchiroli","Aheri","Armori","Chamorshi","Desaiganj","Dhanora","Etapalli","Kurkheda","Korchi","Sironcha"],
+    "Gondia": ["Gondia","Tirora","Goregaon","Amgaon","Salekasa","Arjuni Morgaon","Deori"],
+    "Hingoli": ["Hingoli","Sengaon","Kalamnuri","Aundha Nagnath","Basmath"],
+    "Jalgaon": ["Jalgaon","Bhusawal","Pachora","Dharangaon","Chalisgaon","Amalner","Bodwad","Yawal","Erandol","Jamalpur","Raver","Chopda","Shirpur"],
+    "Jalna": ["Jalna","Ambad","Bhokardan","Badnapur","Partur","Ghansawangi","Mantha"],
+    "Kolhapur": ["Kolhapur","Karveer","Shirol","Hatkanangale","Panhala","Shahuwadi","Gaganbavda","Radhanagari","Kagal","Bhudargad","Ajra","Chandgad"],
+    "Latur": ["Latur","Ausa","Nilanga","Udgir","Chakur","Deoni","Renapur","Shirur Anantpal","Jalkot"],
+    "Mumbai City": ["Mumbai City"],
+    "Mumbai Suburban": ["Borivali","Andheri","Kurla"],
+    "Nagpur": ["Nagpur","Kamptee","Hingna","Umred","Kalmeshwar","Katol","Narkhed","Savner","Parseoni","Mauda","Ramtek","Bhiwapur"],
+    "Nanded": ["Nanded","Mukhed","Deglur","Kandhar","Naigaon","Umri","Hadgaon","Biloli","Kinwat","Ardhapur","Bhokar"],
+    "Nandurbar": ["Nandurbar","Shahada","Taloda","Akkalkuwa","Dhadgaon","Navapur"],
+    "Nashik": ["Nashik","Malegaon","Nandgaon","Sinnar","Chandvad","Igatpuri","Yeola","Dindori","Kalwan","Peth","Surgana","Baglan","Trimbak"],
+    "Osmanabad": ["Osmanabad","Tuljapur","Bhoom","Kalamb","Lohara","Paranda","Umarga","Washi"],
+    "Palghar": ["Palghar","Vasai","Dahanu","Talasari","Jawhar","Mokhada","Vada","Wada"],
+    "Parbhani": ["Parbhani","Gangakhed","Jintur","Selu","Manwat","Pathri","Sonpeth","Purna"],
+    "Pune": ["Pune City","Haveli","Bhor","Baramati","Indapur","Junnar","Shirur","Ambegaon","Khed","Mawal","Mulshi","Daund","Purandar","Velhe"],
+    "Raigad": ["Alibag","Panvel","Pen","Uran","Karjat","Khalapur","Mangaon","Mahad","Poladpur","Shrivardhan","Mhasla","Sudhagad Pali","Roha","Tala"],
+    "Ratnagiri": ["Ratnagiri","Chiplun","Guhagar","Rajapur","Sangameshwar","Dapoli","Lanja","Mandangad","Khed"],
+    "Sangli": ["Sangli","Miraj","Tasgaon","Kavathe Mahankal","Jat","Palus","Khanapur","Walwa","Shirala"],
+    "Satara": ["Satara","Karad","Phaltan","Khatav","Koregaon","Patan","Man","Mahabaleshwar","Wai"],
+    "Sindhudurg": ["Kudal","Sawantwadi","Vengurla","Malvan","Devgad","Kankavli","Dodamarg"],
+    "Solapur": ["Solapur North","Solapur South","Pandharpur","Barshi","Akkalkot","Karmala","Sangola","Mohol","Malshiras","Mangalwedha","Madha"],
+    "Thane": ["Thane","Kalyan","Ulhasnagar","Ambarnath","Bhiwandi","Shahapur","Murbad"],
+    "Wardha": ["Wardha","Hinganghat","Samudrapur","Arvi","Deoli","Karanja"],
+    "Washim": ["Washim","Karanja","Risod","Malegaon","Mangrulpir"],
+    "Yavatmal": ["Yavatmal","Umarkhed","Pusad","Ghatanji","Wani","Arni","Ralegaon","Darwha","Kalamb","Mahagaon","Ner"]
+};
+
+
+/* ========================================
+   LAT/LNG FOR DISTRICTS
+======================================== */
+
+const DISTRICT_COORDS = {
+  "Ahmednagar": {lat:19.0948, lng:74.7480},
+  "Akola": {lat:20.7096, lng:76.9994},
+  "Amravati": {lat:20.9374, lng:77.7796},
+  "Aurangabad": {lat:19.8762, lng:75.3433},
+  "Beed": {lat:18.9891, lng:75.7601},
+  "Bhandara": {lat:21.1682, lng:79.6480},
+  "Buldhana": {lat:20.5296, lng:76.1842},
+  "Chandrapur": {lat:19.9615, lng:79.2961},
+  "Dhule": {lat:20.9042, lng:74.7749},
+  "Gadchiroli": {lat:19.9641, lng:80.1983},
+  "Gondia": {lat:21.4624, lng:80.2209},
+  "Hingoli": {lat:19.7190, lng:77.1424},
+  "Jalgaon": {lat:21.0077, lng:75.5626},
+  "Jalna": {lat:19.8297, lng:75.8800},
+  "Kolhapur": {lat:16.7050, lng:74.2433},
+  "Latur": {lat:18.4088, lng:76.5604},
+  "Mumbai City": {lat:18.9388, lng:72.8354},
+  "Mumbai Suburban": {lat:19.1197, lng:72.8468},
+  "Nagpur": {lat:21.1458, lng:79.0882},
+  "Nanded": {lat:19.1383, lng:77.3210},
+  "Nandurbar": {lat:21.3662, lng:74.2405},
+  "Nashik": {lat:19.9975, lng:73.7898},
+  "Osmanabad": {lat:18.1863, lng:76.0419},
+  "Palghar": {lat:19.6964, lng:72.7690},
+  "Parbhani": {lat:19.2700, lng:76.7600},
+  "Pune": {lat:18.5204, lng:73.8567},
+  "Raigad": {lat:18.5200, lng:73.1000},
+  "Ratnagiri": {lat:16.9902, lng:73.3120},
+  "Sangli": {lat:16.8544, lng:74.5642},
+  "Satara": {lat:17.6887, lng:73.9939},
+  "Sindhudurg": {lat:16.3492, lng:73.5594},
+  "Solapur": {lat:17.6599, lng:75.9064},
+  "Thane": {lat:19.2183, lng:72.9781},
+  "Wardha": {lat:20.7453, lng:78.6022},
+  "Washim": {lat:20.1110, lng:77.1330},
+  "Yavatmal": {lat:20.3899, lng:78.1307}
+};
+
+
+/* ========================================
+   PLACE_COORDS (district + taluka coords)
+======================================== */
+
+const PLACE_COORDS = {};
+const allPlaces = [];
+
+for (let dist in MAHARASHTRA) {
+    // district add
+    allPlaces.push(dist);
+    PLACE_COORDS[dist] = DISTRICT_COORDS[dist];
+
+    // taluka add
+    MAHARASHTRA[dist].forEach(t => {
+        allPlaces.push(t);
+        PLACE_COORDS[t] = DISTRICT_COORDS[dist]; // fallback to district centroid
+    });
+}
+
+
+/* ========================================
+   Haversine function
+======================================== */
+
+function haversineKm(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const toRad = v => v * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return +(R * c).toFixed(1);
+}
+
+/* ========================================
+   EXAMPLE USE:
+======================================== */
+
+// Example:
+// let km = haversineKm(
+//     PLACE_COORDS["Pune"].lat,
+//     PLACE_COORDS["Pune"].lng,
+//     PLACE_COORDS["Solapur North"].lat,
+//     PLACE_COORDS["Solapur North"].lng
+// );
+// console.log("Distance:", km, "km");
+
+
+/* --- 6) calculate button handler --- */
+document.getElementById('calcBtn').addEventListener('click', () => {
+  const from = fromSelect.value;
+  const to = toSelect.value;
+  if (!from || !to) return alert('दोन्ही बाजू निवडा');
+
+  const coordsFrom = PLACE_COORDS[from];
+  const coordsTo = PLACE_COORDS[to];
+
+  if (!coordsFrom || !coordsTo) {
+    document.getElementById('result').textContent = 'Coordinates उपलब्ध नाहीत (add coords).';
+    return;
+  }
+
+  const km = haversineKm(coordsFrom.lat, coordsFrom.lng, coordsTo.lat, coordsTo.lng);
+  document.getElementById('result').innerHTML = `<b>Distance:</b> ${km} km<br/><small>Note: Taluka coords currently use district centroid (approx).</small>`;
+});
+</script>
+</body>
+</html>

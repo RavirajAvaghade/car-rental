@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Rental Lab – Booking (No API)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* small styles for autocomplete dropdown */
+        .suggestions {
+            position: absolute;
+            background: #0b1726;
+            color: #fff;
+            width: 100%;
+            max-height: 180px;
+            overflow-y: auto;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(2,6,23,0.6);
+            z-index: 1000;
+        }
+        .suggestions div {
+            padding: 8px 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover { background: rgba(255,255,255,0.04); }
+        .control-wrap { position: relative; }
+    </style>
+</head>
+<body class="theme-dark">
+<nav class="navbar navbar-blur navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+            <span class="fs-4">🚗</span>
+            <span>UrbanDrive Rentals</span>
+        </a>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <header class="mb-3">
+        <h1 class="section-title">Booking</h1>
+        <p class="section-subtitle">Pickup / Drop city search, distance, time & fare </p>
+    </header>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="booking-card">
+                <h5 class="mb-3">Trip Details</h5>
+                <form id="bookingForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Pickup date</label>
+                        <input type="date" class="form-control" name="pickupDate" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Drop-off date</label>
+                        <input type="date" class="form-control" name="dropoffDate" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Package</label>
+                        <select class="form-select" name="plan" id="plan" required>
+                            <option value="24hrs">24 hours</option>
+                            <option value="4 days">4 days</option>
+                            <option value="10 days">10 days</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 control-wrap">
+                        <label class="form-label">Pickup city</label>
+                        <input type="text" class="form-control" name="pickupCity" id="pickupCity" placeholder="e.g. Pune" autocomplete="off" required>
+                        <div id="pickupSuggestions" class="suggestions d-none"></div>
+                    </div>
+
+                    <div class="col-md-6 control-wrap">
+                        <label class="form-label">Drop-off city</label>
+                        <input type="text" class="form-control" name="dropoffCity" id="dropoffCity" placeholder="e.g. Mumbai" autocomplete="off" required>
+                        <div id="dropoffSuggestions" class="suggestions d-none"></div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label small mb-1">Distance & travel time</label>
+                        <div id="tripMetrics" class="small text-info">
+                            Select pickup & drop-off city to see distance and estimated travel time.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Full name</label>
+                        <input type="text" class="form-control" name="fullName" placeholder="Your name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Mobile</label>
+                        <input type="tel" class="form-control" name="mobile" placeholder="10-digit" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-control" rows="3" name="notes"></textarea>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <small class="text-muted">No external APIs used. Distances are approximate.</small>
+                        <button class="btn btn-primary btn-sm" type="submit">Continue to payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="booking-card">
+                <h5 class="mb-2">Selected Car</h5>
+                <h6 id="bookingCarName" class="mb-2">Loading...</h6>
+                <div id="bookingSummary" class="small"></div>
+                <hr>
+                <p class="small text-muted mb-0">
+                    
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container d-flex justify-content-between small flex-column flex-md-row gap-2">
+        <span>Booking</span>
+        <span></span>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

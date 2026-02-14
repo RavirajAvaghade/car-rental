@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UrbanDrive — Booking History</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Small page-specific styles */
+    .history-card { max-width:1100px; margin:18px auto; }
+    .badge-status { font-size:0.8rem; }
+    .no-bookings { text-align:center; padding:40px 10px; }
+    .table-wrap { overflow:auto; }
+    .action-btns > button { margin-right:6px; }
+  </style>
+</head>
+<body class="theme-dark">
+<nav class="navbar navbar-blur navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+      <span class="fs-4">🚗</span>
+      <span>UrbanDrive Rentals</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto me-3">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="fleet.html">Fleet</a></li>
+        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link active" href="booking-history.html">My Bookings</a></li>
+      </ul>
+      <button id="themeToggle" class="theme-toggle" type="button"><span class="icon">🌙</span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-4">
+  <div class="history-card booking-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h3 class="mb-0">Booking History</h3>
+        <div class="small text-muted">Your recent bookings are shown here. Download invoice or view details.</div>
+      </div>
+
+      <div class="d-flex gap-2 align-items-center">
+        <select id="statusFilter" class="form-select form-select-sm">
+          <option value="all">All status</option>
+          <option value="PENDING">Pending</option>
+          <option value="CONFIRMED">Confirmed</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
+        <input id="qInput" class="form-control form-control-sm" placeholder="Search by car / city / name">
+        <button id="exportCsv" class="btn btn-sm btn-outline-secondary">Export CSV</button>
+      </div>
+    </div>
+
+    <div id="bookingsContainer" class="table-wrap">
+      <!-- JS injects table or empty state -->
+    </div>
+  </div>
+</main>
+
+<!-- DETAILS MODAL -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="dmTitle" class="modal-title">Booking Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="dmBody">
+        <!-- filled by JS -->
+      </div>
+      <div class="modal-footer">
+        <button id="downloadInvoiceBtn" class="btn btn-sm btn-primary">Download Invoice (PDF)</button>
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container d-flex justify-content-between small flex-column flex-md-row gap-2 py-3">
+    <span>UrbanDrive • Booking history</span>
+    <span>Client-side demo • Data saved locally in browser.</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Booking history page script
+(function(){
+  const container = document.getElementById('bookingsContainer');
+  const qInput = document.getElementById('qInput');
+  const statusFilter = document.getElementById('statusFilter');
+  const exportBtn = document.getElementById('exportCsv');
+  const detailsModalEl = document.getElementById('detailsModal');
+  const dmTitle = document.getElementById('dmTitle');
+  const dmBody = document.getElementById('dmBody');
+  const downloadInvoiceBtn = document.getElementById('downloadInvoiceBtn');
+
+  // load bookings from localStorage (key used earlier: ud_bookings)
+  function loadBookings(){
+    try{ return JSON.parse(localStorage.getItem('ud_bookings') || '[]'); }catch(e){ return []; }
+  }
+
+  function formatRupees(amount){ if (!amount && amount !== 0) return '₹ 0'; return '₹ ' + Number(amount).toLocaleString('en-IN'); }
+  function formatDate(d){ if(!d) return '-'; const dt = new Date(d); return dt.toLocaleString(); }
+
+  function render(list){
+    if(!list || list.length === 0){
+      container.innerHTML = '<div class="no-bookings text-muted">No bookings yet. Your confirmed bookings will appear here.</div>';
+      return;
+    }
+
+    let html = '<table class="table table-hover table-sm align-middle mb-0"><thead><tr>'+
+      '<th>Booking ID</th><th>Car</th><th>Route</th><th>Dates</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+
+    list.forEach(b => {
+      html += `<tr data-id="${b.id}">`+
+              `<td><code>${b.id}</code><div class="small text-muted mt-1">${formatDate(b.createdAt)}</div></td>`+
+              `<td>${escapeHtml(b.carName || b.car || '-') }</td>`+
+              `<td>${escapeHtml((b.pickupCity || '-') + ' → ' + (b.dropoffCity || '-'))}</td>`+
+              `<td>${escapeHtml((b.pickupDate||'-') + ' to ' + (b.dropoffDate||'-'))}</td>`+
+              `<td>${formatRupees(b.amount)}</td>`+
+              `<td><span class="badge bg-${badgeClassFor(b.status)} badge-status">${(b.status||'PENDING')}</span></td>`+
+              `<td class="action-btns">`+
+                `<button class="btn btn-sm btn-outline-primary" data-action="view">View</button>`+
+                `<button class="btn btn-sm btn-outline-secondary" data-action="download">Invoice</button>`+
+              `</td></tr>`;
+    });
+
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  function badgeClassFor(status){
+    if(!status) return 'secondary';
+    const s = status.toLowerCase();
+    if(s.includes('confirm')) return 'success';
+    if(s.includes('cancel')) return 'danger';
+    if(s.includes('pending')) return 'warning';
+    return 'secondary';
+  }
+
+  function escapeHtml(str){ if(!str) return ''; return String(str).replace(/[&<>"'`]/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;","`":"&#96;"}[m];}); }
+
+  function filterAndRender(){
+    const q = (qInput.value||'').trim().toLowerCase();
+    const st = statusFilter.value || 'all';
+    const all = loadBookings();
+    const filtered = all.filter(b => {
+      if(st !== 'all' && (b.status||'').toUpperCase() !== st) return false;
+      if(!q) return true;
+      const hay = ((b.carName||'') + ' ' + (b.pickupCity||'') + ' ' + (b.dropoffCity||'') + ' ' + (b.fullName||'')).toLowerCase();
+      return hay.includes(q);
+    });
+    render(filtered);
+  }
+
+  // click delegation for actions
+  container.addEventListener('click', (ev) => {
+    const btn = ev.target.closest('button');
+    if(!btn) return;
+    const tr = btn.closest('tr'); if(!tr) return;
+    const id = tr.getAttribute('data-id');
+    const all = loadBookings();
+    const booking = all.find(x=> String(x.id) === String(id));
+    if(!booking) return;
+    const action = btn.getAttribute('data-action');
+    if(action === 'view') openDetails(booking);
+    if(action === 'download') downloadInvoice(booking);
+  });
+
+  function openDetails(b){
+    dmTitle.textContent = `Booking ${b.id} — ${b.carName || b.car || ''}`;
+    let html = `<div class="row"><div class="col-md-6">`+
+               `<p><strong>Customer:</strong> ${escapeHtml(b.fullName || 'Guest')}</p>`+
+               `<p><strong>Mobile:</strong> ${escapeHtml(b.mobile || '-')}</p>`+
+               `<p><strong>Route:</strong> ${escapeHtml((b.pickupCity||'-') + ' → ' + (b.dropoffCity||'-'))}</p>`+
+               `</div><div class="col-md-6">`+
+               `<p><strong>Dates:</strong> ${escapeHtml((b.pickupDate||'-') + ' to ' + (b.dropoffDate||'-'))}</p>`+
+               `<p><strong>Package:</strong> ${escapeHtml(b.plan || '-')}</p>`+
+               `<p><strong>Amount:</strong> ${formatRupees(b.amount)}</p>`+
+               `</div></div>`;
+    if(b.notes) html += `<div class="mt-2"><strong>Notes:</strong><div class="small text-muted">${escapeHtml(b.notes)}</div></div>`;
+    if(b.coupon) html += `<div class="mt-2 text-success">Coupon: <strong>${escapeHtml(b.coupon)}</strong> (discount ${formatRupees(b.discount||0)})</div>`;
+    html += `<div class="mt-3 small text-muted">Booking created: ${formatDate(b.createdAt)}</div>`;
+    dmBody.innerHTML = html;
+    var myModal = new bootstrap.Modal(detailsModalEl); myModal.show();
+
+    downloadInvoiceBtn.onclick = function(){ downloadInvoice(b); };
+  }
+
+  function downloadInvoice(b){
+    // simple invoice as text -> download as .txt (PDF generation would need library)
+    const lines = [];
+    lines.push('UrbanDrive Rentals');
+    lines.push('Booking ID: ' + b.id);
+    lines.push('Customer: ' + (b.fullName||'Guest'));
+    lines.push('Mobile: ' + (b.mobile||'-'));
+    lines.push('Car: ' + (b.carName||b.car||'-'));
+    lines.push('Route: ' + ((b.pickupCity||'-') + ' → ' + (b.dropoffCity||'-')));
+    lines.push('Dates: ' + ((b.pickupDate||'-') + ' to ' + (b.dropoffDate||'-')));
+    lines.push('Amount: ' + (b.amount || 0));
+    if(b.coupon) lines.push('Coupon: ' + b.coupon + ' (discount ' + (b.discount||0) + ')');
+    lines.push('Status: ' + (b.status || ''));
+    lines.push('Created: ' + (b.createdAt || ''));
+
+    const blob = new Blob([lines.join('\n')], {type:'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `booking-${b.id}.txt`;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  // CSV export
+  exportBtn.addEventListener('click', ()=>{
+    const all = loadBookings();
+    if(!all || all.length===0){ alert('No bookings to export'); return; }
+    const headers = ['id','car','carName','fullName','mobile','pickupCity','dropoffCity','pickupDate','dropoffDate','plan','amount','status','createdAt','coupon','discount'];
+    const rows = [headers.join(',')];
+    all.forEach(b => {
+      const vals = headers.map(h => '"'+((b[h]||'')+'').replace(/"/g,'""')+'"');
+      rows.push(vals.join(','));
+    });
+    const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'bookings.csv'; document.body.appendChild(a); a.click(); a.remove();
+  });
+
+  qInput.addEventListener('input', filterAndRender);
+  statusFilter.addEventListener('change', filterAndRender);
+
+  // initial render
+  filterAndRender();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UrbanDrive Car Rentals – About Us</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="theme-dark">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-blur navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+            <span class="fs-4">🚗</span>
+            <span>UrbanDrive Car Rentals</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto me-3">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="fleet.html">Fleet</a></li>
+                <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+                <li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            </ul>
+
+            <button id="themeToggle" class="theme-toggle" type="button">
+                <span class="icon">🌙</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+
+<!-- MAIN CONTENT -->
+<main class="container py-4">
+
+    <h1 class="section-title">About UrbanDrive Car Rentals</h1>
+    <p class="section-subtitle">
+        Book self-drive cars online for your trips – from short city rides to long weekend getaways.
+    </p>
+
+    <div class="row g-4">
+
+        <!-- Left section -->
+        <div class="col-lg-7">
+            <div class="booking-card">
+
+                <h5 class="mb-3">What is UrbanDrive?</h5>
+                <p class="text-secondary small">
+                    UrbanDrive Car Rentals is a concept web application that allows users to
+                    <strong>book cars online for their trips</strong>.
+                    Users can browse different cars, compare prices and choose the perfect vehicle
+                    for family trips, outstation travel or daily city rides.
+                </p>
+
+                <p class="text-secondary small">
+                    This project is built as a <strong>realistic car rental system</strong> for learning,
+                    portfolio and viva purpose.  
+                    It shows how an online platform can manage trip-based car bookings with a clean,
+                    modern user interface.
+                </p>
+
+                <h6 class="mt-3">Key Use Cases</h6>
+                <ul class="small">
+                    <li>Book a car online for a weekend trip with friends.</li>
+                    <li>Plan a family tour and select a comfortable 7-seater.</li>
+                    <li>Take a sedan or hatchback for office or city travel.</li>
+                    <li>Choose cars based on budget, fuel type and transmission.</li>
+                </ul>
+
+                <h6 class="mt-3">How Online Booking Works</h6>
+                <ol class="small">
+                    <li><strong>Browse the fleet:</strong> View all available cars with details like seats, fuel and price.</li>
+                    <li><strong>Select trip details:</strong> Choose trip start date, end date and time.</li>
+                    <li><strong>Fill booking form:</strong> Enter basic information and confirm the car.</li>
+                    <li><strong>Trip ready:</strong> Car is reserved for your selected trip duration (conceptual flow).</li>
+                </ol>
+
+                <p class="small mb-0">
+                    The project demonstrates a complete flow from browsing cars to booking them for trips,
+                    similar to real-world self-drive car rental platforms.
+                </p>
+            </div>
+        </div>
+
+        <!-- Right section -->
+        <div class="col-lg-5">
+            <div class="booking-card">
+
+                <h6 class="mb-2">App-Style Features</h6>
+                <ul class="small">
+                    <li>Online car listing for trip bookings.</li>
+                    <li>Filters for fuel type, transmission, seats and price.</li>
+                    <li>Favourites system so users can save preferred cars.</li>
+                    <li>Booking page with trip date & time selection.</li>
+                    <li>Dark / Light theme toggle with saved preference.</li>
+                    <li>Responsive design – works on mobile, tablet and desktop.</li>
+                </ul>
+
+                <hr>
+
+                <h6 class="mb-2">Technology Used (Project Stack)</h6>
+                <ul class="small">
+                    <li>HTML5 – multi-page structure (Home, Fleet, Booking, About, Contact).</li>
+                    <li>CSS3 – custom theming, glassmorphism cards, layout styling.</li>
+                    <li>JavaScript – car data, client-side filters, favourites, booking query params.</li>
+                    <li>Bootstrap 5 – grid system, navbar, responsive utilities.</li>
+                    <li>LocalStorage – storing favourites and theme mode.</li>
+                </ul>
+
+                <p class="small text-muted mb-0">
+                    This project is ideal for viva, resume and interview discussions to explain
+                    web development skills and trip-based booking logic.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Stats / Highlights -->
+    <div class="row g-4 mt-3">
+        <div class="col-lg-4">
+            <div class="booking-card text-center">
+                <h6 class="mb-1">Trip-Focused Design</h6>
+                <p class="small text-secondary mb-0">
+                    Every screen is designed around planning and booking trips online.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="booking-card text-center">
+                <h6 class="mb-1">Real-World Inspired</h6>
+                <p class="small text-secondary mb-0">
+                    Inspired by popular self-drive car apps, adapted for learning purposes.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="booking-card text-center">
+                <h6 class="mb-1">Portfolio Project</h6>
+                <p class="small text-secondary mb-0">
+                    Showcases front-end development, UI/UX skills and JavaScript logic.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+    <div class="container d-flex justify-content-between small flex-column flex-md-row gap-2">
+        <span>UrbanDrive Car Rentals • Online Trip Booking Concept Project</span>
+        <span>Designed &amp; Developed by Raviraj Avaghade</span>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

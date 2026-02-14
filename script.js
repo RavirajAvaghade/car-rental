@@ -16,7 +16,7 @@ const cars = [
         fuel: "Petrol",
         transmission: "Manual",
         seats: 7,
-        image: "images/maruti.avif",
+        image: "maruti.avif",
         prices: { "24hrs": 2280, "4 days": 9120, "10 days": 22800 },
         tag: "Popular",
         badgeClass: "badge-popular"
@@ -28,7 +28,7 @@ const cars = [
         fuel: "Petrol",
         transmission: "Manual",
         seats: 5,
-        image: "images/swift.avif",
+        image: "swift.avif",
         prices: { "24hrs": 1584, "4 days": 6336, "10 days": 15840 },
         tag: "Best Seller",
         badgeClass: "badge-best"
@@ -40,7 +40,7 @@ const cars = [
         fuel: "Diesel",
         transmission: "Manual",
         seats: 7,
-        image: "images/innova.jpg",
+        image: "innova.jpg",
         prices: { "24hrs": 3984, "4 days": 15936, "10 days": 39840 },
         tag: "Premium",
         badgeClass: "badge-premium"
@@ -52,7 +52,7 @@ const cars = [
         fuel: "Petrol",
         transmission: "Manual",
         seats: 5,
-        image: "images/hyndai.webp",
+        image: "hyndai.webp",
         prices: { "24hrs": 2976, "4 days": 11904, "10 days": 29760 },
         tag: "New",
         badgeClass: "badge-new"
@@ -64,7 +64,7 @@ const cars = [
         fuel: "Petrol",
         transmission: "Automatic",
         seats: 5,
-        image: "images/HONDA.AVIF",
+        image: "HONDA.AVIF",
         prices: { "24hrs": 2300, "4 days": 9200, "10 days": 23000 },
         tag: "Comfort",
         badgeClass: "badge-popular"
@@ -76,7 +76,7 @@ const cars = [
         fuel: "Diesel",
         transmission: "Manual",
         seats: 7,
-        image: "images/MG1.WEBP",
+        image: "MG1.WEBP",
         prices: { "24hrs": 3200, "4 days": 12800, "10 days": 32000 },
         tag: "Tech",
         badgeClass: "badge-trending"
@@ -88,7 +88,7 @@ const cars = [
         fuel: "Petrol",
         transmission: "Manual",
         seats: 5,
-        image: "images/i20.webp",
+        image: "i20.webp",
         prices: { "24hrs": 1700, "4 days": 6800, "10 days": 17000 },
         tag: "Hatchback",
         badgeClass: "badge-economy"
@@ -100,7 +100,7 @@ const cars = [
         fuel: "Petrol",
         transmission: "Manual",
         seats: 5,
-        image: "images/kiger.avif",
+        image: "kiger.avif",
         prices: { "24hrs": 1900, "4 days": 7600, "10 days": 19000 },
         tag: "Compact SUV",
         badgeClass: "badge-popular"
@@ -112,7 +112,7 @@ const cars = [
         fuel: "Petrol",
         transmission: "Automatic",
         seats: 5,
-        image: "images/Volkswagen.avif",
+        image: "Volkswagen.avif",
         prices: { "24hrs": 2700, "4 days": 10800, "10 days": 27000 },
         tag: "Premium Sedan",
         badgeClass: "badge-premium"
@@ -124,7 +124,7 @@ const cars = [
         fuel: "Electric",
         transmission: "Automatic",
         seats: 5,
-        image: "images/nexonev.avif",
+        image: "nexonev.avif",
         prices: { "24hrs": 2500, "4 days": 10000, "10 days": 25000 },
         tag: "EV",
         badgeClass: "badge-premium"
@@ -136,7 +136,7 @@ const cars = [
         fuel: "Electric",
         transmission: "Automatic",
         seats: 5,
-        image: "images/tiagoev.avif",
+        image: "tiagoev.avif",
         prices: { "24hrs": 1600, "4 days": 6400, "10 days": 16000 },
         tag: "Budget EV",
         badgeClass: "badge-economy"
@@ -148,7 +148,7 @@ const cars = [
         fuel: "Electric",
         transmission: "Automatic",
         seats: 5,
-        image: "images/atto3.avif",
+        image: "atto3.avif",
         prices: { "24hrs": 3200, "4 days": 12800, "10 days": 32000 },
         tag: "Premium EV",
         badgeClass: "badge-trending"
@@ -160,7 +160,7 @@ const cars = [
         fuel: "Electric",
         transmission: "Automatic",
         seats: 5,
-        image: "images/konaev.avif",
+        image: "konaev.avif",
         prices: { "24hrs": 2800, "4 days": 11200, "10 days": 28000 },
         tag: "Compact EV",
         badgeClass: "badge-popular"
@@ -172,7 +172,7 @@ const cars = [
         fuel: "Electric",
         transmission: "Automatic",
         seats: 4,
-        image: "images/cometev.avif",
+        image: "cometev.avif",
         prices: { "24hrs": 1400, "4 days": 5600, "10 days": 14000 },
         tag: "City EV",
         badgeClass: "badge-economy"
@@ -184,7 +184,7 @@ const cars = [
         fuel: "Electric",
         transmission: "Automatic",
         seats: 5,
-        image: "images/bmwi4.avif",
+        image: "bmwi4.avif",
         prices: { "24hrs": 6500, "4 days": 26000, "10 days": 65000 },
         tag: "Luxury EV",
         badgeClass: "badge-premium"
